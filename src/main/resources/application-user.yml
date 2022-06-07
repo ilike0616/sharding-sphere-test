@@ -1,0 +1,27 @@
+spring:
+  shardingsphere:
+    datasource:
+      ds:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/demo_ds_0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        password: maidaokeji
+        username: root
+      names: ds
+    rules:
+      sharding:
+        binding-tables:
+          - t_user
+        broadcast-tables: t_address
+        sharding-algorithms:
+          t-user-algorithms:
+            type: USER_HIS
+        tables:
+          t_user:
+            actual-data-nodes: ds.t_user_2000,ds.t_user_2005,ds.t_user_2010,ds.t_user_2015,ds.t_user_2020
+            table-strategy:
+              standard:
+                sharding-algorithm-name: t-user-algorithms
+                sharding-column: birthday
+    props:
+      sql-show: true

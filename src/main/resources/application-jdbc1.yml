@@ -1,0 +1,42 @@
+spring:
+  shardingsphere:
+    datasource:
+      ds:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/demo_ds_0?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        password: maidaokeji
+        username: root
+      names: ds
+    rules:
+      sharding:
+        binding-tables:
+          - t_order
+          - t_user
+        sharding-algorithms:
+          t-order-algorithms:
+            type: ORDER_HIS
+          t-user-algorithms:
+            type: USER_HIS
+        tables:
+          t_order:
+            actual-data-nodes: ds.t_order_$->{2022..2030}
+            table-strategy:
+              standard:
+                sharding-algorithm-name: t-order-algorithms
+                sharding-column: interval_time
+                #algorithm-expression:
+          t_user:
+            actual-data-nodes: ds.t_user_2000,ds.t_user_2005,ds.t_user_2010,ds.t_user_2015,ds.t_user_2020
+            table-strategy:
+              standard:
+                sharding-algorithm-name: t-user-algorithms
+                sharding-column: birthday
+            key-generate-strategy:
+              column: id
+              key-generator-name: snowflake
+        key-generators:
+          snowflake:
+            type: SNOWFLAKE
+    props:
+      sql-show: true

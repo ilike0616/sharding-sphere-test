@@ -1,0 +1,2 @@
+cn.like.shardingspheretest.config.CustomStandardShardingAlgorithm
+cn.like.shardingspheretest.config.UserStandardShardingAlgorithm
